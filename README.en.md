@@ -35,6 +35,33 @@ void loop() {
 - 13 bytes of RAM per sender, 11 per reader on an Arduino Uno.
 - Key reader thresholds sit halfway between standard lengths (±1 unit tolerance), with debounce.
 
+## Simulation results
+
+These charts and outputs are a **simulation** on a PC running this library's code with a fake `millis()`. They are not hardware measurements.
+
+![On/off timing diagram of the sender for SOS SOS at 20 WPM](extras/gambar/kirim_sos.svg)
+
+`nyala()` output while sending `"SOS SOS"` at 20 WPM, sampled every 1 ms: dot 60 ms, dash 180 ms, symbol gap 60 ms, letter gap 180 ms, word gap 420 ms, exactly PARIS timing.
+
+![Press lengths of 25 random taps and the letters read as HALO DUNIA](extras/gambar/ketukan.svg)
+
+`PembacaMorse` at 10 WPM reading deliberately sloppy taps (seeded random): dots 74–191 ms, dashes 293–453 ms. Every tap falls on the correct side of the 2-unit threshold, so every letter is read correctly.
+
+Translator examples (`ubahKeMorse` = text to Morse, `ubahKeTeks` = Morse to text), printed by the simulation:
+
+```
+ubahKeMorse("SOS") -> "... --- ..."
+ubahKeMorse("Halo Dunia") -> ".... .- .-.. --- / -.. ..- -. .. .-"
+ubahKeTeks(".- .-. -.. ..- .. -. --- / ..---") -> "ARDUINO 2"
+ubahKeTeks("-- --- .-. ... . / ........") -> "MORSE *"
+```
+
+To regenerate (`extras/simulasi`):
+```sh
+cd extras/simulasi
+python gambar.py   # needs g++ and matplotlib
+```
+
 ## Function reference
 
 | Indonesian | English | Notes |

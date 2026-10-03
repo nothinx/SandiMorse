@@ -61,6 +61,37 @@ Panggil `perbarui()` di setiap `loop()`. Hindari `delay()` panjang di `loop()`, 
 
 Teks yang dikirim **tidak disalin**, jadi harus tetap ada selama dikirim: string literal (`"SOS"`) atau array global. Jangan kirim array lokal yang hilang saat fungsi selesai.
 
+## Hasil simulasi
+
+Grafik dan keluaran di bawah adalah **simulasi** di PC yang menjalankan kode library ini dengan `millis()` tiruan, bukan pengukuran hardware.
+
+![Diagram waktu nyala/mati pengirim untuk SOS SOS pada 20 WPM dengan ukuran titik, garis, dan jeda](extras/gambar/kirim_sos.svg)
+
+Keluaran `nyala()` saat mengirim `"SOS SOS"` pada 20 WPM, dibaca setiap 1 ms. Titik 60 ms, garis 180 ms, jeda simbol 60 ms, jeda huruf 180 ms, dan jeda kata 420 ms tepat sesuai timing PARIS. Satu kiriman selesai dalam 4,08 detik termasuk jeda 7 unit di akhir.
+
+![Lama tekan 25 ketukan acak dan huruf HALO DUNIA yang terbaca](extras/gambar/ketukan.svg)
+
+`PembacaMorse` pada 10 WPM menerima ketukan "HALO DUNIA" yang sengaja dibuat tidak rapi (acak dengan seed tetap): titik 74–191 ms, garis 293–453 ms, jeda juga acak. Semua ketukan berada di sisi yang benar dari batas 2 unit, jadi seluruh huruf terbaca tepat.
+
+Contoh penerjemah teks ⇄ Morse (keluaran program simulasi):
+
+```
+ubahKeMorse("SOS") -> "... --- ..."
+ubahKeMorse("Halo Dunia") -> ".... .- .-.. --- / -.. ..- -. .. .-"
+ubahKeMorse("Jam 07:30, OK?") -> ".--- .- -- / ----- --... ---... ...-- ----- --..-- / --- -.- ..--.."
+ubahKeTeks("... --- ...") -> "SOS"
+ubahKeTeks(".- .-. -.. ..- .. -. --- / ..---") -> "ARDUINO 2"
+ubahKeTeks("-- --- .-. ... . / ........") -> "MORSE *"
+```
+
+Huruf kecil diperlakukan sama dengan huruf besar, dan kode yang tidak ada di tabel (`........`) menjadi `*`.
+
+Grafik dibuat dari simulasi di PC yang menjalankan kode library ini (`extras/simulasi`):
+```sh
+cd extras/simulasi
+python gambar.py   # butuh g++ dan matplotlib
+```
+
 ## Buzzer pasif dengan `tone()`
 
 Buzzer pasif butuh `tone()`, jadi pakai mode tanpa pin dan panggil `tone()` hanya saat status berubah:
