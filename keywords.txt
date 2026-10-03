@@ -1,0 +1,21 @@
+#######################################
+# SandiMorse
+#######################################
+
+SandiMorse	KEYWORD1
+PembacaMorse	KEYWORD1
+
+mulai	KEYWORD2
+kirim	KEYWORD2
+perbarui	KEYWORD2
+berhenti	KEYWORD2
+nyala	KEYWORD2
+sedangMengirim	KEYWORD2
+aturWPM	KEYWORD2
+durasiUnit	KEYWORD2
+hurufBaru	KEYWORD2
+huruf	KEYWORD2
+ubahKeMorse	KEYWORD2
+ubahKeTeks	KEYWORD2
+
+TIDAK_DIKENAL	LITERAL1
