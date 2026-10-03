@@ -62,6 +62,19 @@ cd extras/simulasi
 python gambar.py   # needs g++ and matplotlib
 ```
 
+## Speed & memory
+
+Measured with simavr (cycle-accurate ATmega328P simulator), Arduino Uno 16 MHz, sending `"SOS"` at 20 WPM, same sketch for all.
+
+| Sender | SandiMorse 1.0.0 | Etherkit Morse 1.1.2 | MorseEncoder 2.0.3 |
+|---|---|---|---|
+| One update call | 105 cycles (7 µs) | 226 (14 µs), must run every 1 ms | - (blocking) |
+| Program blocked while sending `"SOS"` | 0 | 0 | 1,801 ms |
+| RAM per object | 13 B | 141 B | 12 B |
+| Extra flash | 602 B | 1,644 B | 2,680 B |
+
+`PembacaMorse::perbarui()` (key reader) takes 104–120 cycles. Both `perbarui()` functions are O(1); `ubahKeTeks()` is O(length × 63) because it scans the 63-byte table. Benchmark sketch: `extras/benchmark/SandiMorseBenchmark`.
+
 ## Function reference
 
 | Indonesian | English | Notes |

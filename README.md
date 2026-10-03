@@ -92,6 +92,29 @@ cd extras/simulasi
 python gambar.py   # butuh g++ dan matplotlib
 ```
 
+## Kecepatan & memori
+
+Diukur dengan simavr (simulator ATmega328P yang akurat per siklus) di Arduino Uno 16 MHz. Pengirim: 20 WPM, kirim `"SOS"` ke pin 13, sketch yang sama untuk semua library; `perbarui()` diukur di tengah satu titik/garis (jalur yang paling sering).
+
+| Pengirim | SandiMorse 1.0.0 | Etherkit Morse 1.1.2 | MorseEncoder 2.0.3 |
+|---|---|---|---|
+| Satu panggilan update | 105 siklus (7 µs) | 226 (14 µs), wajib tepat tiap 1 ms | - (memblokir) |
+| Lama program berhenti saat kirim `"SOS"` | 0 | 0 | 1.801 ms |
+| RAM per objek | 13 B | 141 B | 12 B |
+| Flash tambahan | 602 B | 1.644 B | 2.680 B |
+
+Fungsi lain (sketch `extras/benchmark`):
+
+| | Siklus | Kompleksitas |
+|---|---|---|
+| `PembacaMorse::perbarui()` tombol dilepas / ditekan | 104 / 120 (7 µs) | O(1) |
+| `ubahKeMorse("SOS KU")` | 2.264 (141 µs) | O(panjang teks) |
+| `ubahKeTeks("... --- ... / -.- ..-")` | 4.954 (310 µs) | O(panjang × 63) |
+
+`SandiMorse::perbarui()` O(1) waktu dan memori. `ubahKeTeks()` mencari tiap kode di tabel 63 byte (±600 siklus per huruf); tabel kebalikan akan lebih cepat tetapi menambah flash, padahal fungsi ini dipanggil sesekali, jadi sengaja tidak dibuat. Pembaca ketukan SimpleMorse tidak diukur: `update()`-nya memanggil `delay(50)`.
+
+Mengulang pengukuran: sketch `extras/benchmark/SandiMorseBenchmark` (butuh simavr).
+
 ## Buzzer pasif dengan `tone()`
 
 Buzzer pasif butuh `tone()`, jadi pakai mode tanpa pin dan panggil `tone()` hanya saat status berubah:
